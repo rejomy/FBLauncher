@@ -1,0 +1,4 @@
+  name: FireballLauncher
+  main: io.dogsbean.fblauncher.Main
+  version: 1.0
+  author: dogsbean
