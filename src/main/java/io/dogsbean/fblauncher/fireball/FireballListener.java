@@ -41,6 +41,7 @@ public class FireballListener implements Listener {
                 double remainingCooldown = (COOLDOWN_TIME_MS - (currentTime - lastUsed)) / 1000.0;
                 String formattedCooldown = String.format("%.1f", remainingCooldown);
                 player.sendMessage(ChatColor.RED + "Fireball cooldown: " + ChatColor.YELLOW + formattedCooldown + " seconds.");
+                event.setCancelled(true);
                 return;
             }
         }
