@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -20,7 +21,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class FireballListener implements Listener {
-    private List<Material> allowBreak = Arrays.asList(Material.WOOD, Material.WOOL);
+    private final List<Material> allowBreak = Arrays.asList(Material.WOOD, Material.WOOL);
     private final Map<UUID, Long> fireballCooldowns = new ConcurrentHashMap<>();
     private static final long COOLDOWN_TIME_MS = 500;
 
@@ -58,6 +59,12 @@ public class FireballListener implements Listener {
 
         fireballCooldowns.put(playerId, currentTime);
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityExplode(EntityExplodeEvent event) {
+        List<Material> allowedBlocks = Arrays.asList(Material.ENDER_STONE, Material.WOOD);
+        event.blockList().removeIf(block -> !allowedBlocks.contains(block.getType()));
     }
 
     @EventHandler

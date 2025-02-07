@@ -17,7 +17,7 @@ public class Main extends JavaPlugin {
                 "/_/ /_/_/  \\__/_.__/\\_,_/_/_/ /____/\\_,_/\\_,_/_//_/\\__/_//_/\\__/_/   \n" +
                 "                                                                     \n" +
                 "v1.0\n" +
-                "Plugin by Dogsbean");
+                "Plugin by Dogsbean\n");
 
         getServer().getPluginManager().registerEvents(new FireballListener(), this);
     }
