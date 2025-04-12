@@ -1,5 +1,5 @@
 # Fireball Launcher
-- Need help?: add me discord @krouda
+- Need help?: [discord](https://discord.gg/xydjE7ym5W).
 
 ### Features
 - Right-click to launch a fireball.
