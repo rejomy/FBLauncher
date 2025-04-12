@@ -1,5 +1,8 @@
-package io.dogsbean.fblauncher.fireball;
+package io.dogsbean.fblauncher.listener;
 
+import io.dogsbean.fblauncher.config.Config;
+import io.dogsbean.fblauncher.util.FireballUtil;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -7,6 +10,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -20,27 +24,37 @@ import org.bukkit.util.Vector;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@AllArgsConstructor
 public class FireballListener implements Listener {
-    private final List<Material> allowBreak = Arrays.asList(Material.WOOD, Material.WOOL);
+
     private final Map<UUID, Long> fireballCooldowns = new ConcurrentHashMap<>();
-    private static final long COOLDOWN_TIME_MS = 500;
+
+    Config config;
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (!event.hasItem() || event.getItem().getType() != Material.FIREBALL || !event.getAction().name().contains("RIGHT_")) {
+        if (!event.hasItem() || event.getItem().getType() != Material.FIREBALL || event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
 
         Player player = event.getPlayer();
         UUID playerId = player.getUniqueId();
-
         long currentTime = System.currentTimeMillis();
+
+        // Cooldown check.
         if (fireballCooldowns.containsKey(playerId)) {
+            int cooldownMillis = (int) (config.getCooldownSeconds() * 1000);
             long lastUsed = fireballCooldowns.get(playerId);
-            if (currentTime - lastUsed < COOLDOWN_TIME_MS) {
-                double remainingCooldown = (COOLDOWN_TIME_MS - (currentTime - lastUsed)) / 1000.0;
-                String formattedCooldown = String.format("%.1f", remainingCooldown);
-                player.sendMessage(ChatColor.RED + "Fireball cooldown: " + ChatColor.YELLOW + formattedCooldown + " seconds.");
+
+            if (currentTime - lastUsed < cooldownMillis) {
+
+                // Send message only if it is not empty.
+                if (!config.getMessage().isEmpty()) {
+                    double remainingCooldown = (cooldownMillis - (currentTime - lastUsed)) / 1000.0;
+                    String formattedCooldown = String.format("%.1f", remainingCooldown);
+                    player.sendMessage(config.getMessage().replace("$cooldown", formattedCooldown));
+                }
+
                 event.setCancelled(true);
                 return;
             }
@@ -54,18 +68,9 @@ public class FireballListener implements Listener {
         }
         player.updateInventory();
 
-        Vector direction = player.getLocation().getDirection();
-        Fireball fireball = (Fireball) player.launchProjectile(Fireball.class, direction);
-        fireball.setShooter(player);
-
+        FireballUtil.launch(player);
         fireballCooldowns.put(playerId, currentTime);
         event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onEntityExplode(EntityExplodeEvent event) {
-        List<Material> allowedBlocks = Arrays.asList(Material.ENDER_STONE, Material.WOOD);
-        event.blockList().removeIf(block -> !allowedBlocks.contains(block.getType()));
     }
 
     @EventHandler
@@ -102,7 +107,7 @@ public class FireballListener implements Listener {
                 damage = event.getFinalDamage() / 4;
             }
 
-            explodeKnockback(event.getDamager().getLocation(), victim.getLocation(), victim);
+            FireballUtil.explodeKnockback(event.getDamager().getLocation(), victim.getLocation(), victim, config);
             victim.damage(damage);
 
             event.setCancelled(true);
@@ -110,41 +115,21 @@ public class FireballListener implements Listener {
         }
     }
 
-    private void explodeKnockback(Location tntLocaton, Location victimLocation, Player victim) {
-        Vector dirToExplosion = tntLocaton.toVector().subtract(victimLocation.toVector());
-        double distanceFromExplosion = tntLocaton.distance(victimLocation);
-
-        dirToExplosion.multiply(-1);
-        dirToExplosion.setY(0).normalize();
-
-        double explosionStrength = 1.25;
-        double explosionY = 1.1;
-        double explosionDistance = 2.0;
-
-        if(distanceFromExplosion > explosionDistance) {
-            explosionStrength = 0.7;
-            explosionY = 0.8;
-        }
-
-        dirToExplosion.multiply(explosionStrength);
-        dirToExplosion.setY(explosionY);
-        victim.setVelocity(dirToExplosion);
+    @EventHandler
+    public void onEntityExplode(EntityExplodeEvent event) {
+        event.blockList().removeIf(block -> {
+            String typeName = block.getType().name().toLowerCase();
+            return config.getExcludedFromExplodeBlocks().stream().anyMatch(value -> value.toLowerCase().contains(typeName));
+        });
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onFallDamage(EntityDamageEvent event) {
-        if (event.getEntityType() != EntityType.PLAYER) {
+        if (!config.isForceDisableFallDamage() || event.getEntityType() != EntityType.PLAYER) {
             return;
         }
 
         if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void onBlockBreak(BlockBreakEvent event) {
-        if (allowBreak.stream().noneMatch(it -> event.getBlock().getType().equals(it))) {
             event.setCancelled(true);
         }
     }

@@ -1,15 +1,21 @@
 package io.dogsbean.fblauncher;
 
-import io.dogsbean.fblauncher.fireball.FireballListener;
+import io.dogsbean.fblauncher.config.Config;
+import io.dogsbean.fblauncher.listener.FireballListener;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
+
     @Getter private static Main instance;
 
     @Override
     public void onEnable() {
         instance = this;
+
+        saveDefaultConfig();
+        Config config = new Config();
+        config.load(getConfig());
 
         getLogger().info("   _____         __        ____  __                      __          \n" +
                 "  / __(_)______ / /  ___ _/ / / / /  ___ ___ _____  ____/ /  ___ ____\n" +
@@ -19,6 +25,6 @@ public class Main extends JavaPlugin {
                 "v1.0\n" +
                 "Plugin by Dogsbean\n");
 
-        getServer().getPluginManager().registerEvents(new FireballListener(), this);
+        getServer().getPluginManager().registerEvents(new FireballListener(config), this);
     }
 }
