@@ -11,6 +11,8 @@ import java.util.Set;
 @Getter
 public class Config {
 
+    private String prefix;
+
     private double explosionDistance;
     private double explosionY;
     private double explosionStrength;
@@ -28,6 +30,8 @@ public class Config {
     private boolean teamProtectionEnabled;
 
     public void load(FileConfiguration config) {
+        prefix = config.getString("prefix");
+
         explosionDistance = config.getDouble("explosion.distance", 10.0);
         explosionY = config.getDouble("explosion.y", 0.5);
         explosionStrength = config.getDouble("explosion.strength", 2.0);

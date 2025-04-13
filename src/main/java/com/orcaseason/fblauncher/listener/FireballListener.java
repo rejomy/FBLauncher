@@ -97,7 +97,7 @@ public class FireballListener implements Listener {
                 victim.getScoreboard().getEntryTeam(victim.getName()) != null &&
                 victim.getScoreboard().getEntryTeam(victim.getName())
                         .equals(shooter.getScoreboard().getEntryTeam(shooter.getName()))) {
-            shooter.sendMessage(ChatColor.RED + "You cannot attack your teammates!");
+            shooter.sendMessage(config.getPrefix() + ChatColor.RED + "You cannot attack your teammates!");
             event.setCancelled(true);
             return;
         }

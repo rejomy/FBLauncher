@@ -1,3 +1,6 @@
+prefix:
+  "§c§lFireball "
+
 explosion:
   strength: 1.25
   y: 1.1

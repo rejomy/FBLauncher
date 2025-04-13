@@ -23,7 +23,7 @@ public class FireballCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("fblauncher.admin")) {
-            sender.sendMessage(ChatColor.RED + "You don't have permission!");
+            sender.sendMessage(config.getPrefix() + ChatColor.RED + "You don't have permission!");
             return true;
         }
 
@@ -36,19 +36,19 @@ public class FireballCommand implements CommandExecutor {
             case "reload":
                 config.load(plugin.getConfig());
                 plugin.saveConfig();
-                sender.sendMessage(ChatColor.GREEN + "Configuration reloaded!");
+                sender.sendMessage(config.getPrefix() + ChatColor.GREEN + "Configuration reloaded!");
                 return true;
 
             case "set":
                 if (args.length < 3) {
-                    sender.sendMessage(ChatColor.RED + "Usage: /fblauncher set <option> <value>");
+                    sender.sendMessage(config.getPrefix() + ChatColor.RED + "Usage: /fblauncher set <option> <value>");
                     return true;
                 }
                 return handleSetCommand(sender, args[1], args[2]);
 
             case "menu":
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(ChatColor.RED + "This command is for players only!");
+                    sender.sendMessage(config.getPrefix() + ChatColor.RED + "This command is for players only!");
                     return true;
                 }
                 new FireballMenu((Player) sender, config, plugin).open();
@@ -72,7 +72,7 @@ public class FireballCommand implements CommandExecutor {
             switch (option.toLowerCase()) {
                 case "explosiondistance":
                     double explosionDistance = Double.parseDouble(value);
-                    if (explosionDistance <= 0) throw new IllegalArgumentException("Value must be positive!");
+                    if (explosionDistance <= 0) throw new IllegalArgumentException(config.getPrefix() + "Value must be positive!");
                     configFile.set("explosion.distance", explosionDistance);
                     break;
 
@@ -82,7 +82,7 @@ public class FireballCommand implements CommandExecutor {
 
                 case "explosionstrength":
                     double explosionStrength = Double.parseDouble(value);
-                    if (explosionStrength <= 0) throw new IllegalArgumentException("Value must be positive!");
+                    if (explosionStrength <= 0) throw new IllegalArgumentException(config.getPrefix() + "Value must be positive!");
                     configFile.set("explosion.strength", explosionStrength);
                     break;
 
@@ -92,13 +92,13 @@ public class FireballCommand implements CommandExecutor {
 
                 case "farexplosionstrength":
                     double farExplosionStrength = Double.parseDouble(value);
-                    if (farExplosionStrength <= 0) throw new IllegalArgumentException("Value must be positive!");
+                    if (farExplosionStrength <= 0) throw new IllegalArgumentException(config.getPrefix() + "Value must be positive!");
                     configFile.set("explosion.far-strength", farExplosionStrength);
                     break;
 
                 case "cooldownseconds":
                     double cooldownSeconds = Double.parseDouble(value);
-                    if (cooldownSeconds < 0) throw new IllegalArgumentException("Value must be non-negative!");
+                    if (cooldownSeconds < 0) throw new IllegalArgumentException(config.getPrefix() + "Value must be non-negative!");
                     configFile.set("cooldown-seconds", cooldownSeconds);
                     break;
 
@@ -112,7 +112,7 @@ public class FireballCommand implements CommandExecutor {
 
                 case "fireballspeed":
                     double fireballSpeed = Double.parseDouble(value);
-                    if (fireballSpeed <= 0) throw new IllegalArgumentException("Value must be positive!");
+                    if (fireballSpeed <= 0) throw new IllegalArgumentException(config.getPrefix() + "Value must be positive!");
                     configFile.set("fireball.speed", fireballSpeed);
                     break;
 
@@ -122,23 +122,23 @@ public class FireballCommand implements CommandExecutor {
 
                 case "fireballparticlecount":
                     int particleCount = Integer.parseInt(value);
-                    if (particleCount < 0) throw new IllegalArgumentException("Value must be non-negative!");
+                    if (particleCount < 0) throw new IllegalArgumentException(config.getPrefix() + "Value must be non-negative!");
                     configFile.set("fireball.particle-count", particleCount);
                     break;
 
                 default:
-                    sender.sendMessage(ChatColor.RED + "Unknown option: " + option);
+                    sender.sendMessage(config.getPrefix() + ChatColor.RED + "Unknown option: " + option);
                     return true;
             }
             plugin.saveConfig();
             config.load(configFile);
-            sender.sendMessage(ChatColor.GREEN + "Set " + option + " to " + value);
+            sender.sendMessage(config.getPrefix() + ChatColor.GREEN + "Set " + option + " to " + value);
             return true;
         } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.RED + "Invalid number format!");
+            sender.sendMessage(config.getPrefix() + ChatColor.RED + "Invalid number format!");
             return true;
         } catch (IllegalArgumentException e) {
-            sender.sendMessage(ChatColor.RED + e.getMessage());
+            sender.sendMessage(config.getPrefix() + ChatColor.RED + e.getMessage());
             return true;
         }
     }
