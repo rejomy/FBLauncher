@@ -16,6 +16,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.Map;
 import java.util.UUID;
@@ -84,7 +85,22 @@ public class FireballListener implements Listener {
             return;
         }
 
+        ProjectileSource source = ((Fireball) event.getDamager()).getShooter();
+        if (!(source instanceof Player)) {
+            return;
+        }
+
         Player victim = (Player) event.getEntity();
+        Player shooter = (Player) source;
+
+        if (config.isTeamProtectionEnabled() &&
+                victim.getScoreboard().getEntryTeam(victim.getName()) != null &&
+                victim.getScoreboard().getEntryTeam(victim.getName())
+                        .equals(shooter.getScoreboard().getEntryTeam(shooter.getName()))) {
+            shooter.sendMessage(ChatColor.RED + "You cannot attack your teammates!");
+            event.setCancelled(true);
+            return;
+        }
 
         double damage = event.getDamager().getTicksLived() > 20 ? event.getFinalDamage() / 4 : 0;
         FireballUtil.explodeKnockback(event.getDamager().getLocation(), victim.getLocation(), victim, config);

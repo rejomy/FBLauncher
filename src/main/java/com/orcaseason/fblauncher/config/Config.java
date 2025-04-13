@@ -25,6 +25,8 @@ public class Config {
     private String fireballParticle;
     private int fireballParticleCount;
 
+    private boolean teamProtectionEnabled;
+
     public void load(FileConfiguration config) {
         explosionDistance = config.getDouble("explosion.distance", 10.0);
         explosionY = config.getDouble("explosion.y", 0.5);
@@ -39,5 +41,7 @@ public class Config {
         fireballSpeed = config.getDouble("fireball.speed", 1.0);
         fireballParticle = config.getString("fireball.particle", "SMOKE");
         fireballParticleCount = config.getInt("fireball.particle-count", 10);
+
+        teamProtectionEnabled = config.getBoolean("team-protection-enabled", true);
     }
 }

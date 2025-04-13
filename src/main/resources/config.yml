@@ -10,6 +10,8 @@ fireball:
   particle: "FLAME"
   particle-count: 10
 
+team-protection-enabled: true
+
 # Players will not receive any damage from fall.
 force-disable-entity-fall-damage: false
 
