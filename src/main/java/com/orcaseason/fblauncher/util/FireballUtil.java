@@ -2,7 +2,6 @@ package com.orcaseason.fblauncher.util;
 
 import com.orcaseason.fblauncher.config.Config;
 import lombok.experimental.UtilityClass;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.LargeFireball;
@@ -19,23 +18,17 @@ public class FireballUtil {
     }
 
     public void explodeKnockback(Location location, Location victimLocation, Player victim, Config config) {
-        Vector dirToExplosion = location.toVector().subtract(victimLocation.toVector());
+        Vector dirToExplosion = victimLocation.toVector().subtract(location.toVector()).normalize();
         double distanceFromExplosion = location.distance(victimLocation);
 
-        dirToExplosion.multiply(-1);
-        dirToExplosion.setY(0).normalize();
+        double explosionStrength = distanceFromExplosion > config.getExplosionDistance()
+                ? config.getFarExplosionStrength()
+                : config.getExplosionStrength();
+        double explosionY = distanceFromExplosion > config.getExplosionDistance()
+                ? config.getFarExplosionY()
+                : config.getExplosionY();
 
-        double explosionStrength = config.getExplosionStrength();
-        double explosionY = config.getExplosionY();
-        double explosionDistance = config.getExplosionDistance();
-
-        if (distanceFromExplosion > explosionDistance) {
-            explosionStrength = config.getFarExplosionStrength();
-            explosionY = config.getFarExplosionY();
-        }
-
-        dirToExplosion.multiply(explosionStrength);
-        dirToExplosion.setY(explosionY);
+        dirToExplosion.multiply(explosionStrength).setY(explosionY);
         victim.setVelocity(dirToExplosion);
     }
 }

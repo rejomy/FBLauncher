@@ -2,41 +2,42 @@ package com.orcaseason.fblauncher.config;
 
 import lombok.Getter;
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 public class Config {
 
-    double explosionDistance;
-    double explosionY;
-    double explosionStrength;
-    double farExplosionY;
-    double farExplosionStrength;
-    double cooldownSeconds;
-    String message;
-    boolean forceDisableFallDamage;
-    List<String> excludedFromExplodeBlocks;
+    private double explosionDistance;
+    private double explosionY;
+    private double explosionStrength;
+    private double farExplosionY;
+    private double farExplosionStrength;
+    private double cooldownSeconds;
+    private String message;
+    private boolean forceDisableFallDamage;
+    private Set<String> excludedFromExplodeBlocks;
 
-    double fireballSpeed;
-    String fireballParticle;
-    int fireballParticleCount;
+    private double fireballSpeed;
+    private String fireballParticle;
+    private int fireballParticleCount;
 
     public void load(FileConfiguration config) {
-        farExplosionStrength = config.getDouble("explosion.far-strength");
-        farExplosionY = config.getDouble("explosion.far-y");
-        explosionDistance = config.getDouble("explosion.distance");
-        explosionY = config.getDouble("explosion.y");
-        explosionStrength = config.getDouble("explosion.strength");
-        cooldownSeconds = config.getDouble("cooldown-seconds");
-        message = ChatColor.translateAlternateColorCodes('&', config.getString("cooldown-message"));
-        forceDisableFallDamage = config.getBoolean("force-disable-entity-fall-damage");
-        excludedFromExplodeBlocks = config.getStringList("excluded-from-explode-blocks");
+        explosionDistance = config.getDouble("explosion.distance", 10.0);
+        explosionY = config.getDouble("explosion.y", 0.5);
+        explosionStrength = config.getDouble("explosion.strength", 2.0);
+        farExplosionY = config.getDouble("explosion.far-y", 0.3);
+        farExplosionStrength = config.getDouble("explosion.far-strength", 1.0);
+        cooldownSeconds = config.getDouble("cooldown-seconds", 1.0);
+        message = ChatColor.translateAlternateColorCodes('&', config.getString("cooldown-message", "&cPlease wait $cooldown seconds!"));
+        forceDisableFallDamage = config.getBoolean("force-disable-entity-fall-damage", false);
+        excludedFromExplodeBlocks = new HashSet<>(config.getStringList("excluded-from-explode-blocks"));
 
-        fireballSpeed = config.getDouble("fireball.speed");
-        fireballParticle = config.getString("fireball.particle");
-        fireballParticleCount = config.getInt("fireball.particle-count");
+        fireballSpeed = config.getDouble("fireball.speed", 1.0);
+        fireballParticle = config.getString("fireball.particle", "SMOKE");
+        fireballParticleCount = config.getInt("fireball.particle-count", 10);
     }
 }
