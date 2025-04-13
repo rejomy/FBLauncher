@@ -127,28 +127,32 @@ public class FireballListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onFireballHit(ProjectileHitEvent event) {
-        if (!(event.getEntity() instanceof Fireball) ||
-                !(event.getEntity().getShooter() instanceof Player)) {
-            return;
-        }
+        if (event.getEntityType() != EntityType.FIREBALL) return;
+
+        Projectile projectile = event.getEntity();
+        if (!(projectile.getShooter() instanceof Player)) return;
+
+        Player shooter = (Player) projectile.getShooter();
+        Location loc = projectile.getLocation();
 
         String particleName = config.getFireballParticle();
         int particleCount = config.getFireballParticleCount();
+
         if (particleName == null || particleName.isEmpty() || particleName.equalsIgnoreCase("NONE")) {
             return;
         }
 
-        Location loc = event.getEntity().getLocation();
         try {
             Effect effect = Effect.valueOf(particleName.toUpperCase());
-            double maxDistanceSquared = 32 * 32;
             for (Player nearby : loc.getWorld().getPlayers()) {
-                if (nearby.getLocation().distanceSquared(loc) < maxDistanceSquared) {
-                    nearby.getWorld().playEffect(loc, effect, 0, particleCount);
+                if (nearby.getLocation().distanceSquared(loc) < 32 * 32) {
+                    for (int i = 0; i < particleCount; i++) {
+                        nearby.getWorld().playEffect(loc, effect, 0);
+                    }
                 }
             }
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
+            shooter.getServer().getLogger().warning("Invalid particle name: " + particleName);
         }
     }
 }
