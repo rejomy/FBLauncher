@@ -149,15 +149,15 @@ public class FireballMenu implements Listener {
 
     private String getOptionFromSlot(int slot) {
         switch (slot) {
-            case 0: return "Explosion Distance";
-            case 1: return "Explosion Y";
-            case 2: return "Explosion Strength";
-            case 3: return "Far Explosion Y";
-            case 4: return "Far Explosion Strength";
-            case 5: return "Cooldown Seconds";
-            case 6: return "Cooldown Message";
-            case 7: return "Disable Fall Damage";
-            case 8: return "Fireball Speed";
+            case 9: return "Explosion Distance";
+            case 10: return "Explosion Y";
+            case 11: return "Explosion Strength";
+            case 12: return "Far Explosion Y";
+            case 13: return "Far Explosion Strength";
+            case 14: return "Cooldown Seconds";
+            case 15: return "Cooldown Message";
+            case 16: return "Disable Fall Damage";
+            case 17: return "Fireball Speed";
             default: return null;
         }
     }
