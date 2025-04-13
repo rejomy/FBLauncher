@@ -56,6 +56,7 @@ public class FireballListener implements Listener {
             item.setAmount(item.getAmount() - 1);
         }
 
+        player.damage(0);
         FireballUtil.launch(player, config);
         fireballCooldowns.put(playerId, currentTime);
         event.setCancelled(true);
