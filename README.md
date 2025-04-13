@@ -1,7 +1,9 @@
-# Fireball Launcher
-- Need help?: [discord](https://discord.gg/xydjE7ym5W).
+# Fireball Launcher Plugin
+Fireball Launcher with Knockback & Cooldown.
 
-### Features
-- Right-click to launch a fireball.
-- Fireball knockbacks entities.
-- Configurable cooldown.
+## Contributing
+Feel free to open issues and pull requests for improvements or bug fixes.
+
+## Support
+For support or inquiries, open an ticket in my discord [Support Discord](https://discord.gg/xydjE7ym5W).
+
