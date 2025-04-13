@@ -5,6 +5,11 @@ explosion:
   far-strength: 0.7
   far-y: 0.8
 
+fireball:
+  speed: 1.5
+  particle: "FLAME"
+  particle-count: 10
+
 # Players will not receive any damage from fall.
 force-disable-entity-fall-damage: false
 
