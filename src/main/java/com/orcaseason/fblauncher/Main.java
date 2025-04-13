@@ -1,5 +1,6 @@
 package com.orcaseason.fblauncher;
 
+import com.orcaseason.fblauncher.command.FireballCommand;
 import com.orcaseason.fblauncher.config.Config;
 import com.orcaseason.fblauncher.listener.FireballListener;
 import lombok.Getter;
@@ -26,5 +27,6 @@ public class Main extends JavaPlugin {
                 "Plugin by Orcaseason.com\n");
 
         getServer().getPluginManager().registerEvents(new FireballListener(config), this);
+        getCommand("fblauncher").setExecutor(new FireballCommand(config, this));
     }
 }

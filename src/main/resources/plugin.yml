@@ -2,3 +2,11 @@
   main: com.orcaseason.fblauncher.Main
   version: 1.0
   author: Orcaseason Development
+  commands:
+    fblauncher:
+      description: Manage fireball launcher
+      usage: /<command> [reload|set|menu]
+  permissions:
+    fblauncher.admin:
+      description: Allows managing fireball launcher
+      default: op
