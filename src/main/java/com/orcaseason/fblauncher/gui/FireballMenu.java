@@ -59,6 +59,7 @@ public class FireballMenu implements Listener {
     }
 
     public void open() {
+        initializeItems();
         player.openInventory(inventory);
     }
 
