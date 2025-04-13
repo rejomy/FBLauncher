@@ -3,10 +3,7 @@ package com.orcaseason.fblauncher.listener;
 import com.orcaseason.fblauncher.config.Config;
 import com.orcaseason.fblauncher.util.FireballUtil;
 import lombok.AllArgsConstructor;
-import org.bukkit.ChatColor;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,6 +43,23 @@ public class FireballListener implements Listener {
                 double remainingCooldown = (cooldownMillis - (currentTime - fireballCooldowns.get(playerId))) / 1000.0;
                 player.sendMessage(config.getMessage().replace("$cooldown", String.format("%.1f", remainingCooldown)));
             }
+            event.setCancelled(true);
+            return;
+        }
+
+        Location loc = player.getLocation();
+        int x = loc.getBlockX();
+        int y = loc.getBlockY();
+        int z = loc.getBlockZ();
+
+        Material blockBelow = player.getWorld().getBlockAt(x, y - 1, z).getType();
+        boolean isAirBelow = blockBelow == Material.AIR;
+
+        int groundY = y - (isAirBelow ? 1 : 0);
+        boolean isAirborne = (player.getLocation().getY() - groundY) >= config.getAirSpamLimit();
+
+        if (config.isPreventAirSpam() && isAirborne) {
+            player.sendMessage(ChatColor.RED + "You must be on the ground to use this!");
             event.setCancelled(true);
             return;
         }

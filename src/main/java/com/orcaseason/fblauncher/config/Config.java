@@ -26,6 +26,8 @@ public class Config {
     private double fireballSpeed;
     private String fireballParticle;
     private int fireballParticleCount;
+    private boolean preventAirSpam;
+    private double airSpamLimit;
 
     private boolean teamProtectionEnabled;
 
@@ -45,6 +47,8 @@ public class Config {
         fireballSpeed = config.getDouble("fireball.speed", 1.0);
         fireballParticle = config.getString("fireball.particle", "SMOKE");
         fireballParticleCount = config.getInt("fireball.particle-count", 10);
+        preventAirSpam = config.getBoolean("fireball.prevent-air-spam", false);
+        airSpamLimit = config.getDouble("fireball.air-spam-limit", 0.1);
 
         teamProtectionEnabled = config.getBoolean("team-protection-enabled", true);
     }

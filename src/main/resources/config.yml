@@ -12,6 +12,8 @@ fireball:
   speed: 1.5
   particle: "FLAME"
   particle-count: 10
+  prevent-air-spam: false
+  air-spam-limit: 1.0
 
 team-protection-enabled: true
 
