@@ -21,7 +21,7 @@ When the plugin starts, it generates a default configuration file (`config.yml`)
 ### Example Config Options:
 ```yaml
 prefix:
-  "§c§lFireball "
+  "§c§lFireball §r"
 
 explosion:
   strength: 1.25
