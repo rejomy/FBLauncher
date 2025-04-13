@@ -34,6 +34,7 @@ public class FireballCommand implements CommandExecutor {
 
         switch (args[0].toLowerCase()) {
             case "reload":
+                plugin.reloadConfig();
                 config.load(plugin.getConfig());
                 plugin.saveConfig();
                 sender.sendMessage(config.getPrefix() + ChatColor.GREEN + "Configuration reloaded!");
