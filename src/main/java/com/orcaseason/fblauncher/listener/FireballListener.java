@@ -94,7 +94,7 @@ public class FireballListener implements Listener {
         fireballCooldowns.remove(playerId);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player) || !(event.getDamager() instanceof Fireball)) {
             return;
