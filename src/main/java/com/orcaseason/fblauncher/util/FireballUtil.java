@@ -14,6 +14,8 @@ public class FireballUtil {
     public void launch(Player player, Config config) {
         Vector direction = player.getLocation().getDirection().multiply(config.getFireballSpeed());
         Fireball fireball = player.launchProjectile(LargeFireball.class, direction);
+        fireball.setYield(4.0F);
+        fireball.setIsIncendiary(false);
         fireball.setShooter(player);
     }
 
