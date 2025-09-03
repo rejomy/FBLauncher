@@ -1,6 +1,7 @@
   name: FireballLauncher
   main: com.orcaseason.fblauncher.Main
   version: 1.0
+  api-version: 1.21 # There is no reason to cause legacy material initialization because of it.
   author: Orcaseason Development
   commands:
     fblauncher:

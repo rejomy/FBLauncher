@@ -28,7 +28,7 @@ public class FireballListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
-        if (item == null || item.getType() != Material.FIREBALL ||
+        if (item == null || item.getType() != Material.FIRE_CHARGE ||
                 (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)) {
             return;
         }
